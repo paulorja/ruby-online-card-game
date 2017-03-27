@@ -1,4 +1,4 @@
-class Sield < SupportCard
+class Shield < SupportCard
 
   def initialize
 	

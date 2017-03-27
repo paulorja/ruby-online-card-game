@@ -1,6 +1,6 @@
 class Armor < SupportCard
 
-	def initialize
+  def initialize
 	
   end
 

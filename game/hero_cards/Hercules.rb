@@ -1,4 +1,4 @@
-class Arkantos < Hercules
+class Hercules < HeroCard
 
   def initialize
 
