@@ -12,6 +12,7 @@ require './game/support_card'
 require './game/hand'
 require './game/board'
 require './game/turn'
+require './game/play_command'
 
 require './game/action_cards/giant_sword'
 require './game/action_cards/sword'
@@ -28,14 +29,23 @@ match = Match.new
 match.player_a.draw(3)
 match.player_b.draw(3)
 
+#puts match.player_a.hand.all_cards.inspect
+#puts match.player_b.hand.all_cards.inspect
+
+
+match.play(match.player_a, PlayCommand.new('/summon_hero 1'))
+match.play(match.player_a, PlayCommand.new('/finish_turn'))
+
+match.play(match.player_b, PlayCommand.new('/summon_hero 1'))
+match.play(match.player_b, PlayCommand.new('/finish_turn'))
+
+
+match.play(match.player_a, PlayCommand.new('/play_card 1'))
+# match.play(match.player_a, PlayCommand.new('/summon_hero 1'))
+
 puts match.player_a.hand.all_cards.inspect
-puts match.player_b.hand.all_cards.inspect
 
-if match.player_can_play(match.player_a)
-	match.player_a.summon_hero(1)
-end
-
-puts match.player_a.board.inspect
+#puts match.player_a.board.inspect
 # /summon_hero 2
 
 

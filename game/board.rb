@@ -3,8 +3,7 @@ class Board
 	def initialize
 		@hero = nil
 		@action = nil
-		@support1 = nil
-		@support2 = nil
+		@support = nil
 	end
 
 	def has_hero
@@ -13,6 +12,14 @@ class Board
 
 	def has_action
 		true unless @action.nil?
+	end
+
+	def get_action
+		@action
+	end
+
+	def set_action(action_card)
+		@action = action_card
 	end
 
 	def get_hero

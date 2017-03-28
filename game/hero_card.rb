@@ -8,4 +8,8 @@ class HeroCard < Card
   	@alive
   end
 
+  def decrease_life_points(number)
+  	puts "decrease #{number} life points of #{self}"
+  end
+
 end

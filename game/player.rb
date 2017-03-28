@@ -2,14 +2,14 @@ class Player
 
   attr_accessor :deck, :hand, :board
 
-  def initialize
-    @deck = Deck.new
-    @hand = Hand.new
-    @heroes = Heroes.new
-    @board = Board.new
-    @turn = Turn.new
-    @finish_turn = false
-  end
+  	def initialize
+    	@deck = Deck.new
+    	@hand = Hand.new
+    	@heroes = Heroes.new
+    	@board = Board.new
+    	@turn = Turn.new
+    	@opponent = nil
+  	end
 
 	def draw(number = 1)
   		number.times do |n|
@@ -39,10 +39,59 @@ class Player
 		end
 
 		@board.set_hero(hero)
+		puts "summon hero  #{hero} complete"
 	end
 
-	def finish_turn
-		@finish_turn = true
+	def play_hand_card(hand_card_index)
+		card = @hand.find_by_index(hand_card_index)
+
+		if @board.get_hero.nil?
+			puts 'you dont have a hero'
+			return
+		end
+
+		unless card.is_a? ActionCard or card.is_a? SupportCard
+			puts 'card not found'
+			return
+		end
+
+		if card.is_a? ActionCard
+			play_action_card(card)
+		end
+
+		if card.is_a? SupportCard
+			play_support_card(card)
+		end
+	end
+
+	def set_opponent(player)
+		@opponent = player
+	end
+
+	private
+
+	def play_action_card(action_card)
+		unless @board.get_action.nil?
+			puts 'already exists an action card on the board'
+			return
+		end
+
+		@board.set_action(action_card)
+		puts "play action card #{action_card} complete"
+
+		attack_opponent
+	end
+
+	def play_support_card(support_card)
+	end
+
+	def attack_opponent
+		damage = total_damage
+		@opponent.board.get_hero.decrease_life_points(damage)
+	end
+
+	def total_damage
+		5
 	end
 
 end
