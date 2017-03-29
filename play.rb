@@ -26,20 +26,24 @@ require './game/support_cards/shield'
 
 
 match = Match.new
+player_a = Player.new
+player_b = Player.new
+
+match.player_a = player_a
+match.player_b = player_b
 
 match.start
 
-match.play(match.player_a, PlayCommand.new('/summon_hero 1'))
-match.play(match.player_a, PlayCommand.new('/finish_turn'))
 
-match.play(match.player_b, PlayCommand.new('/summon_hero 0'))
-match.play(match.player_b, PlayCommand.new('/finish_turn'))
+match.play(player_a, PlayCommand.new('/summon_hero 1'))
+match.play(player_a, PlayCommand.new('/finish_turn'))
 
+match.play(player_b, PlayCommand.new('/summon_hero 0'))
+match.play(player_b, PlayCommand.new('/finish_turn'))
 
-match.play(match.player_a, PlayCommand.new('/play_card 1'))
+match.play(player_a, PlayCommand.new("/play_card #{player_a.hand.random_card_index}"))
 # match.play(match.player_a, PlayCommand.new('/summon_hero 1'))
 
-puts match.player_a.hand.all_cards.inspect
 
 #puts match.player_a.board.inspect
 # /summon_hero 2

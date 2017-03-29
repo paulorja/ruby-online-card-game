@@ -3,11 +3,8 @@ class Match
   attr_accessor :player_a, :player_b, :winner, :loser, :player_turn
 
   def initialize
-    @player_a = Player.new
-    @player_b = Player.new
-
-    @player_a.opponent = @player_b
-    @player_b.opponent = @player_a
+    @player_a = nil
+    @player_b = nil
 
     @player_turn = nil
 
@@ -16,6 +13,14 @@ class Match
   end
 
   def start
+    unless @player_a.is_a? Player and @player_b.is_a? Player
+      puts "The match doesn't have players"
+      return
+    end
+    
+    @player_a.opponent = @player_b
+    @player_b.opponent = @player_a
+
     @player_turn = @player_a
 
     @player_a.deck.shuffle
