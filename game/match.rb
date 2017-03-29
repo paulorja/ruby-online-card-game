@@ -17,19 +17,20 @@ class Match
       puts "The match doesn't have players"
       return
     end
+    puts 'Match start!'.yellow
+
     
     @player_a.opponent = @player_b
     @player_b.opponent = @player_a
 
-    @player_turn = @player_a
+    @player_turn = random_player
+    play_log('play first')
 
     @player_a.deck.shuffle
     @player_b.deck.shuffle
 
     @player_a.draw(3)
     @player_b.draw(3)
-
-    puts 'Match start!'.yellow
   end
 
   def player_can_play(player)
@@ -41,9 +42,11 @@ class Match
 		case play_command.name
 		when '/finish_turn'
 			toggle_turn
-			puts "#{player} finish turn"
+    when '/draw'
+      player.draw
 		when '/summon_hero'
 			player.summon_hero(play_command.params[0].to_i)
+      play_log('summon hero' + player.heroes.find_by_index(play_command.params[0].to_i).inspect)
 		when '/play_card'
 			player.play_hand_card(play_command.params[0].to_i)
 		else
@@ -57,11 +60,30 @@ class Match
   private
 
   def toggle_turn
+    play_log('finish turn')
   	if @player_turn == @player_a
   		@player_turn = @player_b
   	else
   		@player_turn = @player_a
   	end
+    play_log('start turn')
   end
+
+  def play_log(log)
+    if @player_turn == @player_a
+      puts 'Player A: '.blue + log
+    else
+      puts 'Player B: '.red + log
+    end
+  end
+
+  def random_player
+    if rand(2) == 1
+      @player_a
+    else
+      @player_b
+    end
+  end
+
 
 end

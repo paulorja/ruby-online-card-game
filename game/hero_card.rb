@@ -16,14 +16,14 @@ class HeroCard < Card
   def decrease_hp(number)
   	old_hp = @hp
   	@hp -= number
+    puts "decrease #{number} hp of #{self} from #{old_hp} to #{@hp}"
   	kill if @hp <= 0
-  	puts "decrease #{number} hp of #{self} from #{old_hp} to #{@hp}"
   end
 
   def kill
   	@hp = 0
   	@alive = false
-  	puts "#{self} killed"
+  	puts "#{self} morreu".yellow
   end
 
 end

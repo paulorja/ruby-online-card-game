@@ -1,8 +1,9 @@
 class PlayCommand
 
-	attr_accessor :params, :name
+	attr_accessor :params, :name, :full_command
 
 	def initialize(command)
+		@full_command = command
 		@params = []
 		@name = ""
 

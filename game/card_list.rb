@@ -24,6 +24,10 @@ class CardList
 		end
 	end
 
+	def random_card_index
+		rand(@card_list.size)
+	end
+
 	protected
 
 		def card_list
