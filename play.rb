@@ -1,5 +1,7 @@
 #Dir[File.dirname(__FILE__) + '/game/*.rb'].each {|file| require file }
 
+require 'colorize'
+
 require './game/card'
 require './game/card_list'
 require './game/action_card'
@@ -25,18 +27,12 @@ require './game/support_cards/shield'
 
 match = Match.new
 
-
-match.player_a.draw(3)
-match.player_b.draw(3)
-
-#puts match.player_a.hand.all_cards.inspect
-#puts match.player_b.hand.all_cards.inspect
-
+match.start
 
 match.play(match.player_a, PlayCommand.new('/summon_hero 1'))
 match.play(match.player_a, PlayCommand.new('/finish_turn'))
 
-match.play(match.player_b, PlayCommand.new('/summon_hero 1'))
+match.play(match.player_b, PlayCommand.new('/summon_hero 0'))
 match.play(match.player_b, PlayCommand.new('/finish_turn'))
 
 

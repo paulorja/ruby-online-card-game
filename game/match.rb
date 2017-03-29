@@ -6,13 +6,25 @@ class Match
     @player_a = Player.new
     @player_b = Player.new
 
-    @player_a.set_opponent(@player_b)
-    @player_b.set_opponent(@player_a)
+    @player_a.opponent = @player_b
+    @player_b.opponent = @player_a
 
-    @player_turn = @player_a
+    @player_turn = nil
 
     @winner = false
     @loser = false
+  end
+
+  def start
+    @player_turn = @player_a
+
+    @player_a.deck.shuffle
+    @player_b.deck.shuffle
+
+    @player_a.draw(3)
+    @player_b.draw(3)
+
+    puts 'Match start!'.yellow
   end
 
   def player_can_play(player)

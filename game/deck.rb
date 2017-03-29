@@ -8,9 +8,6 @@ class Deck < CardList
     add Sword.new
     add Armor.new
     add Shield.new
-
-    self.shuffle
-    puts "Deck shuffle"
   end
 
   def top_card

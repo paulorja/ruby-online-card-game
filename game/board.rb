@@ -1,5 +1,7 @@
 class Board
 
+	attr_accessor :hero, :action, :support
+
 	def initialize
 		@hero = nil
 		@action = nil
@@ -14,20 +16,17 @@ class Board
 		true unless @action.nil?
 	end
 
-	def get_action
-		@action
+	def total_atk
+		total = 0
+		puts "hero: #{@hero.atk} bonus: #{total_bonus_atk}"
+		total = @hero.atk + total_bonus_atk 
 	end
 
-	def set_action(action_card)
-		@action = action_card
-	end
-
-	def get_hero
-		@hero
-	end
-
-	def set_hero(hero)
-		@hero = hero
+	def total_bonus_atk
+		total = 0
+		total += @action.bonus_atk unless @action.nil?
+		total += @support.bonus_atk unless @support.nil?
+		total
 	end
 
 end

@@ -1,6 +1,6 @@
 class Player
 
-  attr_accessor :deck, :hand, :board
+  attr_accessor :deck, :hand, :board, :opponent
 
   	def initialize
     	@deck = Deck.new
@@ -15,8 +15,6 @@ class Player
   		number.times do |n|
   			@hand.add @deck.top_card
   			@deck.remove_top_card
-
-  			puts "Draw"
 		end
 	end
 
@@ -33,19 +31,19 @@ class Player
 			return
 		end
 
-		unless @board.get_hero.nil?
+		unless @board.hero.nil?
 			puts 'already exists a hero on the board'
 			return
 		end
 
-		@board.set_hero(hero)
+		@board.hero = hero
 		puts "summon hero  #{hero} complete"
 	end
 
 	def play_hand_card(hand_card_index)
 		card = @hand.find_by_index(hand_card_index)
 
-		if @board.get_hero.nil?
+		if @board.hero.nil?
 			puts 'you dont have a hero'
 			return
 		end
@@ -64,19 +62,15 @@ class Player
 		end
 	end
 
-	def set_opponent(player)
-		@opponent = player
-	end
-
 	private
 
 	def play_action_card(action_card)
-		unless @board.get_action.nil?
+		unless @board.action.nil?
 			puts 'already exists an action card on the board'
 			return
 		end
 
-		@board.set_action(action_card)
+		@board.action = action_card
 		puts "play action card #{action_card} complete"
 
 		attack_opponent
@@ -86,12 +80,7 @@ class Player
 	end
 
 	def attack_opponent
-		damage = total_damage
-		@opponent.board.get_hero.decrease_life_points(damage)
-	end
-
-	def total_damage
-		5
+		@opponent.board.hero.decrease_hp(@board.total_atk)
 	end
 
 end
