@@ -2,12 +2,26 @@ GEM
   remote: https://rubygems.org/
   specs:
     colorize (0.8.1)
+    em-websocket (0.5.1)
+      eventmachine (>= 0.12.9)
+      http_parser.rb (~> 0.6.0)
+    event_emitter (0.2.5)
+    eventmachine (1.2.3-x86-mingw32)
+    http_parser.rb (0.6.0)
+    require_all (1.4.0)
+    websocket (1.2.4)
+    websocket-client-simple (0.3.0)
+      event_emitter
+      websocket
 
 PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
   colorize
+  em-websocket
+  require_all
+  websocket-client-simple
 
 BUNDLED WITH
    1.12.5
