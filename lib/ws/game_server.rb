@@ -25,6 +25,7 @@ class GameServer
           
           ws.onmessage { |msg|
             GameCommand.new(ws, msg, sid, self)
+            CommandRunner.new(msg)
           }
 
           ws.onclose {
