@@ -1,29 +1,9 @@
 #Dir[File.dirname(__FILE__) + '/game/*.rb'].each {|file| require file }
 
 require 'colorize'
+require 'require_all'
 
-require './game/card'
-require './game/card_list'
-require './game/action_card'
-require './game/deck'
-require './game/hero_card'
-require './game/heroes'
-require './game/match'
-require './game/player'
-require './game/support_card'
-require './game/hand'
-require './game/board'
-require './game/turn'
-require './game/play_command'
-
-require './game/action_cards/giant_sword'
-require './game/action_cards/sword'
-require './game/hero_cards/arkantos'
-require './game/hero_cards/thor'
-require './game/hero_cards/hercules'
-require './game/support_cards/armor'
-require './game/support_cards/shield'
-
+require_all 'game'
 
 
 match = Match.new
@@ -49,14 +29,16 @@ match.play(player_a, PlayCommand.new('/finish_turn'))
 match.play(player_b, PlayCommand.new('/summon_hero 0'))
 match.play(player_b, PlayCommand.new('/finish_turn'))
 
-match.play(player_a, PlayCommand.new("/play_card #{player_a.hand.first_action_card_index}"))
+match.play(player_a, PlayCommand.new("/play_card #{player_a.hand.find_by_index(0)}"))
+match.play(player_a, PlayCommand.new('/attack'))
 match.play(player_a, PlayCommand.new('/finish_turn'))
 
-match.play(player_b, PlayCommand.new("/play_card #{player_b.hand.first_action_card_index}"))
+match.play(player_b, PlayCommand.new("/play_card #{player_b.hand.find_by_index(0)}"))
+match.play(player_b, PlayCommand.new('/attack'))
 match.play(player_b, PlayCommand.new('/finish_turn'))
 
 match.play(player_a, PlayCommand.new('/draw'))
-match.play(player_a, PlayCommand.new("/play_card #{player_a.hand.first_action_card_index}"))
+match.play(player_a, PlayCommand.new("/play_card #{player_a.hand.find_by_index(0)}"))
 match.play(player_a, PlayCommand.new('/finish_turn'))
 
 

@@ -38,35 +38,37 @@ class Match
   end
 
   def play(player, play_command)
+    play_log play_command.name
   	if player_can_play(player)
-		case play_command.name
-		when '/finish_turn'
-			toggle_turn
-    when '/draw'
-      player.draw
-		when '/summon_hero'
-			player.summon_hero(play_command.params[0].to_i)
-      play_log('summon hero' + player.heroes.find_by_index(play_command.params[0].to_i).inspect)
-		when '/play_card'
-			player.play_hand_card(play_command.params[0].to_i)
-		else
-			puts 'play command not exists'
-		end
-  	else
-  		puts 'player can not play'
+      case play_command.name
+        when '/finish_turn'
+          toggle_turn
+        when '/draw'
+          player.draw
+        when '/summon_hero'
+          player.summon_hero(play_command.params[0].to_i)
+          play_log('summon hero' + player.heroes.find_by_index(play_command.params[0].to_i).inspect)
+        when '/play_card'
+          player.play_hand_card(play_command.params[0].to_i)
+          puts player.board.inspect
+        when '/attack'
+          player.attack_opponent
+        else
+          puts 'play command not exists'
+      end
+    else
+      puts 'player can not play'
   	end
   end
 
   private
 
   def toggle_turn
-    play_log('finish turn')
   	if @player_turn == @player_a
   		@player_turn = @player_b
   	else
   		@player_turn = @player_a
   	end
-    play_log('start turn')
   end
 
   def play_log(log)
