@@ -1,9 +1,10 @@
 #Dir[File.dirname(__FILE__) + '/game/*.rb'].each {|file| require file }
 
 require 'colorize'
+require 'em-websocket'
 require 'require_all'
 
-require_all 'game'
+require_all 'lib'
 
 
 match = Match.new
