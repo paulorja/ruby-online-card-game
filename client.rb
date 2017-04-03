@@ -21,11 +21,11 @@ end
 ws = WebSocket::Client::Simple.connect 'ws://127.0.0.1:3001'
 
 ws.on :message do |msg|
-  puts msg.data
+  puts "Server: "+msg.data
 end
 
 ws.on :open do
-  ws.send Command.new('hello').get_json
+
 end
 
 ws.on :close do |e|
@@ -37,14 +37,25 @@ ws.on :error do |e|
   p e
 end
 
+
 loop do
+	puts '====================='
+	puts '======== MENU ======='
+	puts '1 - Partida Online'
+	puts '2 - Jogar Carta'
+
 	json_cmd = nil
-	case STDIN.gets.strip
-	when 'play_card'
-		json_cmd = Command.new('PlayCardCmd')
+	input = STDIN.gets.strip
+
+	case input
+	when '1'
+		json_cmd = Command.new('find_match')
+	when '2'
+		json_cmd = Command.new('play_card')
 	else
 		puts 'invalid command'
 	end
 		
  	ws.send json_cmd.get_json unless json_cmd.nil?
+ 	STDIN.gets.strip
 end

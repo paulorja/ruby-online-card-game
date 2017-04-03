@@ -24,8 +24,8 @@ class GameServer
           @channels[:general].push "#{sid} connected to #general"
           
           ws.onmessage { |msg|
-            GameCommand.new(ws, msg, sid, self)
-            CommandRunner.new(msg)
+            #GameCommand.new(ws, msg, sid, self)
+            CommandRunner.new(msg, ws, sid, self)
           }
 
           ws.onclose {
