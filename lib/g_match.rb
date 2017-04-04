@@ -1,4 +1,4 @@
-class Match
+class GMatch
 
   attr_accessor :player_a, :player_b, :winner, :loser, :player_turn
 

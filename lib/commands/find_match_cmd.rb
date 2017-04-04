@@ -4,37 +4,45 @@ class FindMatchCmd < Command
 	end
 
 	def run
+		@server.matches.each do |match|
+			if match.sid_player_a == @sid or match.sid_player_b == @sid
+				@ws.send 'You already join in a match'
+				return
+			end
+		end
+
 		match_sid
-    	@ws.send 'Looking for match...'
+		send_success('looking_for_match')
 	end
 
 	def match_sid
-	    available_room = find_available_room
-	    if available_room.nil?
-	      puts 'create room'
-	      create_room
+	    available_match = find_available_match
+	    if available_match.nil?
+	      puts 'create match'
+	      create_match
 	    else
-	      puts 'join room'
-	      sid_player = available_room.subscribe { |msg| ws.send msg }
-	      available_room.join(@sid)
-	      available_room.push('A PARTIDA VAI COMECAR')
-	      puts 'available room: ' + available_room.inspect
+	      puts 'join match'
+	      sid_match = available_match.subscribe { |msg| ws.send msg }
+	      available_match.join(@sid, sid_match)
+	      available_match.push('A PARTIDA VAI COMECAR')
+	      puts 'available match: ' + available_match.inspect
 	    end
   	end
 
-	def find_available_room
-	    @server.rooms.each do |room|
-	      return room if room.sid_player_a.nil? or room.sid_player_b.nil?
+	def find_available_match
+	    @server.matches.each do |match|
+	      return match if match.sid_player_a.nil? or match.sid_player_b.nil?
 	    end
 	    nil
   	end
 
-  	def create_room
-	    new_room = Room.new
-	    new_room.join(@sid)
-	    sid_player = new_room.subscribe { |msg| ws.send msg }
-	    @server.rooms.push new_room
-	    puts 'new room: ' + new_room.inspect
+  	def create_match
+	    new_match = Match.new
+	    sid_match = new_match.subscribe { |msg| ws.send msg }
+	    new_match.join(@sid, sid_match)
+	    @server.matches.push new_match
+	    #puts 'new match: ' + new_match.inspect
+	    puts 'sids: ' + new_match.subs.inspect
 	end
 
 	  

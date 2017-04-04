@@ -3,7 +3,7 @@
 require './lib/loader'
 
 
-match = Match.new
+match = GMatch.new
 player_a = Player.new
 player_b = Player.new
 

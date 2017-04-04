@@ -1,10 +1,12 @@
 require 'websocket-client-simple'
 require 'json'
 
+# Command
+# monta um comando que vai em json para o servidor
 class Command
 	attr_accessor :command_name, :params
 	
-	def initialize(command_name, params)
+	def initialize(command_name, params = nil)
 		@command_name = command_name
 		@params = params
 	end
@@ -18,52 +20,96 @@ class Command
 	end
 end
 
-ws = WebSocket::Client::Simple.connect 'ws://127.0.0.1:3001'
-
-ws.on :message do |msg|
-  puts "Server: "+msg.data
+# Response
+# converte a resposta string json que vem do server para um Hash
+class Response
+	attr_reader :msg, :data, :is_valid
+	def initialize(msg)
+		@msg = msg
+		begin 
+			@data = JSON.parse(msg)
+			@is_valid = true
+		rescue
+			@data = nil
+			@is_valid = false
+		end
+	end
+	def error?
+		return false unless @is_valid
+		return true if @data['type'] == 'error'
+	end
+	def success?
+		return false unless @is_valid
+		return true if @data['type'] == 'success'
+	end
 end
 
-ws.on :open do
+# WS
+# conexao com o server
+class ServerConn
+	attr_accessor :ws
+	def initialize
+		@ws = WebSocket::Client::Simple.connect 'ws://127.0.0.1:3001'
 
+		@ws.on :message do |msg|
+			response = Response.new(msg.data)
+			if response.is_valid
+				if response.success?
+					puts response.data['msg']
+				end
+				if response.error?
+					puts 'ERROR' + response.data['msg']
+				end
+			else
+			  	puts "Server: "+msg.data
+			end
+		end
+
+		@ws.on :open do
+
+		end
+
+		@ws.on :close do |e|
+		  p e
+		  exit 1
+		end
+
+		@ws.on :error do |e|
+		  p e
+		end
+	end
 end
 
-ws.on :close do |e|
-  p e
-  exit 1
-end
+ws_conn = ServerConn.new
 
-ws.on :error do |e|
-  p e
-end
-
-
+# VIEW
 loop do
 	puts '====================='
 	puts '======== MENU ======='
-	puts '1 - Partida Online'
-	puts '2 - Jogar Carta'
-	puts '3 - Chat Global'
-	puts '4 - Chat Room'
-
-	json_cmd = nil
+	puts '1 - Procurar partida online'
+	puts '2 - Jogar contra o computador'
+	puts '3 - Chat'
+	puts '0 - Sair'
+	
+	cmd = nil
 	input = STDIN.gets.strip
 
 	case input
 	when '1'
-		json_cmd = Command.new('find_match')
+		cmd = Command.new('find_match')
+		ws_conn.ws.send cmd.get_json
 	when '2'
-		json_cmd = Command.new('play_card')
+		cmd = Command.new('play_vs_bot')
+		ws_conn.ws.send cmd.get_json
 	when '3'
 		puts 'Digite a mensagem: '
-		json_cmd = Command.new('chat_global', {msg: STDIN.gets.strip})
-	when '4'
-		puts 'Digite a mensagem: '
-		json_cmd = Command.new('chat_match', {msg: STDIN.gets.strip})
+		cmd = Command.new('chat_global', {msg: STDIN.gets.strip})
+		ws_conn.ws.send cmd.get_json
+	when '0'
+		break
 	else
 		puts 'invalid command'
 	end
 		
- 	ws.send json_cmd.get_json unless json_cmd.nil?
  	STDIN.gets.strip
 end

@@ -1,6 +1,6 @@
 class GameServer
 
-  attr_accessor :match_finder, :channels, :rooms
+  attr_accessor :match_finder, :channels, :matches
 
   def initialize
     @host = '127.0.0.1'
@@ -11,7 +11,7 @@ class GameServer
       general: EM::Channel.new
     }
 
-    @rooms = []
+    @matches = []
   end
 
   def start
