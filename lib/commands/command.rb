@@ -1,6 +1,6 @@
 class Command
 
-	attr_accessor :ws, :channel, :sid, :server
+	attr_accessor :ws, :sid, :server, :params
 
 	def initialize
 		raise 'You are trying to instantiate an abstract class!'

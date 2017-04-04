@@ -15,6 +15,7 @@ class CommandRunner
 				command.ws = ws
 				command.sid = sid
 				command.server = server
+				command.params = hash_msg
 				command.run
 			else
 				raise "#{command_name} is not a command"
