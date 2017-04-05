@@ -10,6 +10,9 @@ class Match
 
     @winner = false
     @loser = false
+
+    # array of hashes
+    @client_responses = ClientResponses.new
   end
 
   def start(player_a, player_b)
@@ -30,22 +33,32 @@ class Match
   end
 
   def play(player, params)
+    @client_responses.reset
     if is_player_turn player
       case params['play_msg']
       when 'draw'
-        puts 'oi'
-        if player.turn.draw.nil?
-          puts 'draw'
+        if player.turn.draw == false
           player.draw
+          player.turn.draw = true
+          @client_responses.add_send_success "draw_success"
+        else
+          @client_responses.add_send_error "already_draw_in_this_turn"
         end
       when 'finish_turn'
         toggle_turn
+        @client_responses.add_match_push "toggle_turn" 
       else
         puts 'command not found'
       end
     else
       puts 'player cant play'
     end
+
+    return @client_responses
+  end
+
+  def reset_client_responses
+    @client_responses = []
   end
 
   private
