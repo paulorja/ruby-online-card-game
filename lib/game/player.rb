@@ -1,6 +1,6 @@
 class Player
 
-  attr_accessor :deck, :hand, :heroes, :board, :opponent
+  attr_accessor :deck, :hand, :heroes, :board, :opponent, :turn
 
   def initialize()
     @deck = Deck.new

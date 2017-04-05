@@ -31,10 +31,12 @@ class Match
 
   def play(player, params)
     if is_player_turn player
-      case params[:play_msg]
-      when 'drawn'
+      case params['play_msg']
+      when 'draw'
+        puts 'oi'
         if player.turn.draw.nil?
-          player.drawn
+          puts 'draw'
+          player.draw
         end
       when 'finish_turn'
         toggle_turn
@@ -42,7 +44,7 @@ class Match
         puts 'command not found'
       end
     else
-      puts 'player can not play'
+      puts 'player cant play'
     end
   end
 

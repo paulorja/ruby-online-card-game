@@ -36,4 +36,11 @@ class GameServer
     }
   end
 
+  def find_room_by_sid(sid)
+    @rooms.each do |room|
+      return room if room.sid_player_a == sid or room.sid_player_b == sid
+    end
+    nil
+  end
+
 end

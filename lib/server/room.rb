@@ -20,14 +20,17 @@ class Room < EM::Channel
   end
 
   def start_match
-    @player_a = Player.new
-    @player_b = Player.new
     @match.start(@player_a, @player_b)
   end
 
-  def play(command)
+  def play(sid, command)
     # send command params(hash) to match.play
-    @match.play(command.params)
+    player = get_player_by_sid(sid)
+    if player
+      @match.play(player, command.params) 
+    else
+      puts 'player not found'
+    end
   end
   
   def join(sid, sid_match)

@@ -7,7 +7,9 @@ class CommandRunner
 			command_name = command_name_to_class_name(hash_msg['command_name'])
 
 			unless class_exists?(command_name)
-				raise "#{command_name} class not exists"
+				puts "#{command_name} class not exists"
+				@ws.send 'error'
+				return
 			end
 
 			command = Object::const_get(command_name).new
@@ -18,7 +20,8 @@ class CommandRunner
 				command.params = hash_msg
 				command.run
 			else
-				raise "#{command_name} is not a command"
+				puts "#{command_name} is not a command"
+				@ws.send 'error'
 			end
 		rescue Exception => e
 			puts e.message

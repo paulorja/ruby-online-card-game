@@ -11,7 +11,7 @@ class Command
 		@params = params
 	end
 
-	def get_json
+	def to_json
 		hash_cmd = { command_name: @command_name }
 		if @params.is_a? Hash
 			hash_cmd = hash_cmd.merge(@params)
@@ -97,14 +97,34 @@ loop do
 	case input
 	when '1'
 		cmd = Command.new('find_match')
-		ws_conn.ws.send cmd.get_json
+		ws_conn.ws.send cmd.to_json
+		loop do
+			puts '======== partida ======='
+			puts '1 - Passar vez'
+			puts '2 - Comprar carta'
+			puts '3 - Ver jogo'
+			puts '0 - Sair'
+			case STDIN.gets.strip
+			when '1'
+				play_cmd = Command.new('play', {play_msg: 'finish_turn'})
+				ws_conn.ws.send play_cmd.to_json
+			when '2'
+				play_cmd = Command.new('play', {play_msg: 'draw'})
+				ws_conn.ws.send play_cmd.to_json
+			when '3'
+				play_cmd = Command.new('play', {play_msg: 'full_data'})
+
+			when '0'
+				break
+			end
+		end
 	when '2'
 		cmd = Command.new('play_vs_bot')
-		ws_conn.ws.send cmd.get_json
+		ws_conn.ws.send cmd.to_json
 	when '3'
 		puts 'Digite a mensagem: '
 		cmd = Command.new('chat_global', {msg: STDIN.gets.strip})
-		ws_conn.ws.send cmd.get_json
+		ws_conn.ws.send cmd.to_json
 	when '0'
 		break
 	else
