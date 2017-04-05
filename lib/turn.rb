@@ -1,5 +1,7 @@
 class Turn
 
+	attr_accessor :draw, :summon_hero
+
 	def initialize
 		@draw = false
 		@summon_hero = false
@@ -11,6 +13,5 @@ class Turn
 		@summon_hero = false
 		@action = false		
 	end
-
 
 end

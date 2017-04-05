@@ -2,7 +2,7 @@ class Player
 
   attr_accessor :deck, :hand, :heroes, :board, :opponent
 
-  def initialize
+  def initialize()
     @deck = Deck.new
     @hand = Hand.new
     @heroes = Heroes.new

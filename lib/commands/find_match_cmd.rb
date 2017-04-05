@@ -24,8 +24,9 @@ class FindMatchCmd < Command
 	      puts 'join match'
 	      sid_match = available_match.subscribe { |msg| ws.send msg }
 	      available_match.join(@sid, sid_match)
-	      available_match.push('A PARTIDA VAI COMECAR')
-	      puts 'available match: ' + available_match.inspect
+	      available_match.push('a partida vai comecar')
+	      # start the match
+	      available_match.start
 	    end
   	end
 
@@ -41,8 +42,6 @@ class FindMatchCmd < Command
 	    sid_match = new_match.subscribe { |msg| ws.send msg }
 	    new_match.join(@sid, sid_match)
 	    @server.matches.push new_match
-	    #puts 'new match: ' + new_match.inspect
-	    puts 'sids: ' + new_match.subs.inspect
 	end
 
 	  
