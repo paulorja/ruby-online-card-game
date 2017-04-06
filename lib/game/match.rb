@@ -45,13 +45,17 @@ class Match
           @client_responses.add_send_error "already_draw_in_this_turn"
         end
       when 'finish_turn'
-        toggle_turn
-        @client_responses.add_match_push "toggle_turn" 
+        if player.turn.draw == true
+          toggle_turn
+          @client_responses.add_match_push "toggle_turn" 
+        else
+          @client_responses.add_send_error "you_need_draw_first"
+        end 
       else
         puts 'command not found'
       end
     else
-      puts 'player cant play'
+      @client_responses.add_send_error "player_cant_play"
     end
 
     return @client_responses

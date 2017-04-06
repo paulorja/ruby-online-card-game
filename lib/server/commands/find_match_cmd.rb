@@ -12,7 +12,6 @@ class FindMatchCmd < Command
 		end
 
 		match_sid(@sid)
-		send_success('looking_for_match')
 	end
 
 	def match_sid(sid)
@@ -24,7 +23,7 @@ class FindMatchCmd < Command
 	      puts 'join match'
 	      sid_room = available_room.subscribe { |msg| ws.send msg }
 	      available_room.join(sid, sid_room)
-	      available_room.push('a partida vai comecar')
+	      available_room.push('A PARTIDA COMECOU')
 	      # start the match
 	      available_room.start_match
 	    end
@@ -38,6 +37,7 @@ class FindMatchCmd < Command
   	end
 
   	def create_match(sid)
+		send_success('waiting_opponent')
 	    new_room = Room.new
 	    sid_room = new_room.subscribe { |msg| ws.send msg }
 	    new_room.join(sid, sid_room)
