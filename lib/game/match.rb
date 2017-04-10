@@ -40,25 +40,25 @@ class Match
         if player.turn.draw == false
           player.draw
           player.turn.draw = true
-          @client_responses.add_match_push "draw_success"
+          @client_responses.add_match_push 'draw_success'
         else
-          @client_responses.add_send_error "already_draw_in_this_turn"
+          @client_responses.add_send_error 'already_draw_in_this_turn'
         end
       when 'finish_turn'
         if player.turn.draw == true
           toggle_turn
-          @client_responses.add_match_push "toggle_turn" 
+          @client_responses.add_match_push 'toggle_turn'
         else
-          @client_responses.add_send_error "you_need_draw_first"
+          @client_responses.add_send_error 'you_need_draw_first'
         end 
       else
         puts 'command not found'
       end
     else
-      @client_responses.add_send_error "player_cant_play"
+      @client_responses.add_send_error 'player_cant_play'
     end
 
-    return @client_responses
+    @client_responses
   end
 
   def reset_client_responses
