@@ -40,7 +40,7 @@ class Match
         if player.turn.draw == false
           player.draw
           player.turn.draw = true
-          @client_responses.add_send_success "draw_success"
+          @client_responses.add_match_push "draw_success"
         else
           @client_responses.add_send_error "already_draw_in_this_turn"
         end

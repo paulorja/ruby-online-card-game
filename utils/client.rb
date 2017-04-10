@@ -58,7 +58,7 @@ class ServerConn
 					puts response.data['msg']
 				end
 				if response.error?
-					puts 'ERROR' + response.data['msg']
+					puts 'ERROR: ' + response.data['msg']
 				end
 			else
 			  	puts "Server: "+msg.data
