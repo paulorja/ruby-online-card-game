@@ -100,6 +100,8 @@ class ServerConn
           case response.data['msg']
           when 'full_match'
             DrawMatch.draw response.data['full_match']
+          when 'match_started'
+            puts 'A PARTIDA COMECU'
           else
             puts response.data['msg']
           end

@@ -16,9 +16,7 @@ class PlayCmd < Command
 				when 'send_error'
 					send_error response[:msg], response[:params]
 				when 'match_push'
-          room_response = JSON.generate({msg: response[:msg], type: 'push', params: response[:params]})
-          room.push room_response
-          Log.log 'Push: '.blue + room_response.to_s
+					push response[:msg], response[:params]
         else
 					raise 'response not found'
 				end

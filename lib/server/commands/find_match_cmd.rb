@@ -23,7 +23,7 @@ class FindMatchCmd < Command
 	      puts 'join match'
 	      sid_room = available_room.subscribe { |msg| ws.send msg }
 	      available_room.join(sid, sid_room)
-	      available_room.push('A PARTIDA COMECOU')
+	      push 'match_started'
 	      # start the match
 	      available_room.start_match
 	    end

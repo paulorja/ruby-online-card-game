@@ -34,4 +34,18 @@ class Command
     Log.log 'Sent: '.blue + response.to_s
   end
 
+  def push(msg, params = nil)
+    response = {msg: msg, type: 'push'}
+    response = response.merge params if params.is_a? Hash
+
+    room.push JSON.generate(response)
+    Log.log 'Push: '.blue + response.to_s
+  end
+
+  private
+
+  def room
+    @server.find_room_by_sid @sid
+  end
+
 end
