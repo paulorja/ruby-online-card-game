@@ -12,10 +12,16 @@ class Log
 		log "DEBUG #{log}"
 	end
 
+  def self.highlight(log)
+		puts ' --- '.yellow
+		log log
+		puts ' --- '.yellow
+	end
+
 	private
 
 	def self.log(log)
-		puts "#{Time.now.to_s} #{log}"
+		puts "#{Time.now.strftime('%T')} #{Time.now.usec} #{log}"
 	end
 
 end

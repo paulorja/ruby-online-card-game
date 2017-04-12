@@ -5,7 +5,19 @@ class CardList
   end
 
   def add(card)
-    @card_list.push card
+    if card.is_a? Card
+      @card_list.push card
+    else
+      raise 'need to be a card'
+    end
+  end
+
+  def first
+    if size > 0
+      @card_list[1]
+    else
+      nil
+    end
   end
 
   def shuffle
@@ -13,7 +25,11 @@ class CardList
   end
 
   def all_cards
-    @card_list.inspect
+    @card_list
+  end
+
+  def all_card_names
+    all_cards.map(&:class).map(&:to_s).map(&:underscore)
   end
 
   def delete_at(index)
@@ -30,6 +46,14 @@ class CardList
 
   def random_card_index
     rand(@card_list.size)
+  end
+
+  def each(&block)
+    @card_list.each(&block)
+  end
+
+  def size
+    @card_list.size
   end
 
   protected

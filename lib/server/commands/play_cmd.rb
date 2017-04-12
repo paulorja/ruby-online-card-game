@@ -12,12 +12,14 @@ class PlayCmd < Command
 			client_responses.each do |response|
 				case response[:type]
 				when 'send_success'
-					send_success response[:msg]
+          send_success response[:msg], response[:params]
 				when 'send_error'
-					send_error response[:msg]
+					send_error response[:msg], response[:params]
 				when 'match_push'
-					room.push response[:msg]
-				else
+          room_response = JSON.generate({msg: response[:msg], type: 'push', params: response[:params]})
+          room.push room_response
+          Log.log 'Push: '.blue + room_response.to_s
+        else
 					raise 'response not found'
 				end
 			end

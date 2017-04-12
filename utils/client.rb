@@ -1,5 +1,6 @@
 require 'websocket-client-simple'
 require 'json'
+require 'colorize'
 
 # Command
 # monta um comando que vai em json para o servidor
@@ -36,11 +37,51 @@ class Response
 	end
 	def error?
 		return false unless @is_valid
-		return true if @data['type'] == 'error'
+		true if @data['type'] == 'error'
 	end
 	def success?
 		return false unless @is_valid
-		return true if @data['type'] == 'success'
+		true if @data['type'] == 'success'
+	end
+	def push?
+		return false unless @is_valid
+		true if @data['type'] == 'push'
+	end
+end
+
+class DrawMatch
+  def self.draw(full_match)
+    puts `clear`
+    puts '================================='
+    puts "============ #{'OPPONENT'.red} ==========="
+    puts '================================='
+    puts '== HAND => ' + full_match['opponent']['hand'].to_s
+    puts '== HERO => ' + full_match['opponent']['board']['hero']
+    puts '================================='
+    puts "============ #{'YOU'.blue} ================"
+    puts '================================='
+    puts '== HAND => ' + full_match['player']['hand'].join(', ')
+    puts '== HERO => ' + full_match['player']['board']['hero']
+    puts '================================='
+  end
+end
+
+# Client Menu
+class Menu
+	def self.show(title, array_item, exit = false)
+		if title.is_a? String
+			puts " === === === #{title} === === === "
+		else
+			'title need to be a string'
+		end
+		if array_item.is_a? Array
+			array_item.each_with_index do |item, index|
+				puts "#{(index+1)} - #{item}"
+			end
+		end
+		if exit
+			puts '0 - Sair'
+		end
 	end
 end
 
@@ -52,10 +93,16 @@ class ServerConn
 		@ws = WebSocket::Client::Simple.connect 'ws://127.0.0.1:3001'
 
 		@ws.on :message do |msg|
+			#puts 'Received: '.yellow + msg.data
 			response = Response.new(msg.data)
 			if response.is_valid
-				if response.success?
-					puts response.data['msg']
+				if response.success? or response.push?
+          case response.data['msg']
+          when 'full_match'
+            DrawMatch.draw response.data['full_match']
+          else
+            puts response.data['msg']
+          end
 				end
 				if response.error?
 					puts 'ERROR: ' + response.data['msg']
@@ -84,12 +131,7 @@ ws_conn = ServerConn.new
 
 # VIEW
 loop do
-	puts '====================='
-	puts '======== MENU ======='
-	puts '1 - Procurar partida online'
-	puts '2 - Jogar contra o computador'
-	puts '3 - Chat'
-	puts '0 - Sair'
+  Menu.show('BEM VINDO', ['Procurar partida online', 'Jogar contra o computador', 'Chat'], true)
 	
 	cmd = nil
 	input = STDIN.gets.strip
@@ -99,11 +141,7 @@ loop do
 		cmd = Command.new('find_match')
 		ws_conn.ws.send cmd.to_json
 		loop do
-			puts '======== partida ======='
-			puts '1 - Passar vez'
-			puts '2 - Comprar carta'
-			puts '3 - Ver jogo'
-			puts '0 - Sair'
+      Menu.show('Partida', ['Passar vez', 'Comprar carta', 'Ver jogo', 'Jogar herói'], true)
 			case STDIN.gets.strip
 			when '1'
 				play_cmd = Command.new('play', {play_msg: 'finish_turn'})
@@ -112,8 +150,13 @@ loop do
 				play_cmd = Command.new('play', {play_msg: 'draw'})
 				ws_conn.ws.send play_cmd.to_json
 			when '3'
-				play_cmd = Command.new('play', {play_msg: 'full_data'})
-
+				play_cmd = Command.new('play', {play_msg: 'full_match'})
+				ws_conn.ws.send play_cmd.to_json
+				when '4'
+				Menu.show('Selecione um heroi', %w(arkantos ajax agamenon))
+				hero_index = STDIN.gets.strip
+      	play_cmd = Command.new('play', {play_msg: 'summon_hero', hero_index: hero_index})
+				ws_conn.ws.send play_cmd.to_json
 			when '0'
 				break
 			end
@@ -127,8 +170,6 @@ loop do
 		ws_conn.ws.send cmd.to_json
 	when '0'
 		break
-	else
-		puts 'invalid command'
 	end
 		
  	STDIN.gets.strip

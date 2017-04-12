@@ -2,7 +2,7 @@ class Player
 
   attr_accessor :deck, :hand, :heroes, :board, :opponent, :turn
 
-  def initialize()
+  def initialize
     @deck = Deck.new
     @hand = Hand.new
     @heroes = Heroes.new
@@ -21,11 +21,12 @@ class Player
   def summon_hero(hero_index)
     hero = @heroes.find_by_index(hero_index)
 
-    return 'hero not found' unless hero.is_a? HeroCard
-    return 'the hero is not alive' unless hero.is_alive
-    return 'already exists a hero on the board' unless @board.hero.nil?
+    return 'hero_not_found' unless hero.is_a? HeroCard
+    return 'the_hero_is_not_alive' unless hero.is_alive
+    return 'already_exists_a_hero_on_the_board' unless @board.hero.nil?
 
     @board.hero = hero
+    true
   end
 
   def play_hand_card(hand_card_index)
@@ -60,6 +61,23 @@ class Player
     total = @board.total_atk - @opponent.board.total_def
     total = 0 if total < 0
     total
+  end
+
+  def full_match_hash
+    @full_board = {
+        player: {
+            board: {
+                hero: board.hero.to_json,
+            },
+            hand: hand.all_card_names
+        },
+        opponent: {
+            board: {
+                hero: opponent.board.hero.to_json,
+            },
+            hand: opponent.hand.size
+        }
+    }
   end
 
   private

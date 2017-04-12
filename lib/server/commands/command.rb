@@ -12,18 +12,26 @@ class Command
 
 	protected
 
-	def send_success(msg)
-		send(msg, {type: 'success'})
+	def send_success(msg, params = nil)
+		total_params = {type: 'success'}
+		total_params = total_params.merge params if params.is_a? Hash
+
+		send(msg, total_params)
 	end
 
-	def send_error(msg)
-		send(msg, {type: 'error'})
+	def send_error(msg, params = nil)
+		total_params = {type: 'error'}
+		total_params = total_params.merge params if params.is_a? Hash
+
+		send(msg, total_params)
 	end
 
 	def send(msg, params = nil)
 		response = { msg: msg }
-		response = response.merge(params) unless params.nil?
-		@ws.send(JSON.generate(response))
-	end
+		response = response.merge(params) if params.is_a? Hash
+
+    @ws.send(JSON.generate(response))
+    Log.log 'Sent: '.blue + response.to_s
+  end
 
 end

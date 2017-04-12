@@ -3,7 +3,7 @@ class CommandRunner
 	def initialize(msg, ws, sid, server)
 		begin
 			hash_msg = JSON.parse(msg)
-			puts hash_msg
+			Log.log 'Received: '.yellow + hash_msg.to_s
 			command_name = command_name_to_class_name(hash_msg['command_name'])
 
 			unless class_exists?(command_name)

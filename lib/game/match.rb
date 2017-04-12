@@ -50,7 +50,17 @@ class Match
           @client_responses.add_match_push 'toggle_turn'
         else
           @client_responses.add_send_error 'you_need_draw_first'
-        end 
+        end
+      when 'summon_hero'
+        summon_hero = player.summon_hero(params[:hero_index].to_i)
+        if summon_hero.is_a? String
+          @client_responses.add_send_error summon_hero
+        else
+          @client_responses.add_match_push 'summon_hero_success'
+        end
+      when 'full_match'
+        full_match_hash = player.full_match_hash
+        @client_responses.add_send_success 'full_match', { full_match: full_match_hash }
       else
         puts 'command not found'
       end
