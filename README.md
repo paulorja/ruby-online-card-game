@@ -1,6 +1,7 @@
 
-not finished multiplayer terminal card game
-client and server in Ruby
+Not finished multiplayer terminal card game.
+
+Client and server in Ruby.
 
 ### Run server ###
 
