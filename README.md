@@ -1,4 +1,6 @@
-# README #
+
+not finished multiplayer terminal card game
+client and server in Ruby
 
 ### Run server ###
 
@@ -6,4 +8,5 @@
 
 ### Run client ###
 
+* cd utils
 * ruby client.rb
